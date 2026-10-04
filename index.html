@@ -1,139 +1,501 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FX PRO</title>
-<style>
-*{box-sizing:border-box} body{margin:0; background:#070707; color:#fff; font-family:Arial}
-header{padding:16px; background:#111; position:sticky; top:0; z-index:10; border-bottom:1px solid #222}
-header h1{margin:0; font-size:20px; letter-spacing:1px} header h1 span{color:gold}
-header p{margin:4px 0 0; color:#777; font-size:12px}
-.tab{display:none; padding:16px; padding-bottom:80px}
-.tab.active{display:block}
-.card{background:#131313; border:1px solid #222; border-radius:16px; padding:14px; margin:10px 0}
-.green{color:#00ff88} .red{color:#ff5555} .gold{color:gold}
-.dot{width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:6px}
-.bg-g{background:#00ff88} .bg-r{background:#ff5555} .bg-y{background:#ffcc00}
-.confbar{background:#222; height:6px; border-radius:10px; overflow:hidden; margin-top:8px}
-.confill{height:100%; background:gold}
-.btn{width:100%; background:gold; color:#000; border:0; padding:14px; border-radius:12px; font-weight:bold; margin-top:10px}
-.nav{position:fixed; bottom:0; left:0; right:0; background:#111; border-top:1px solid #222; display:flex; justify-content:space-around; padding:8px 0}
-.nav button{background:0; border:0; color:#666; font-size:10px} .nav button.active{color:gold}
-input,textarea{width:100%; background:#0a0a0a; border:1px solid #222; color:white; padding:12px; border-radius:10px; margin-top:8px}
-.lesson{border-left:3px solid gold; padding-left:10px; margin:12px 0}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SwiftDrop FX</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- TradingView -->
+  <script src="https://s3.tradingview.com/tv.js"></script>
 </head>
+
 <body>
 
-<header>
-<h1>FX <span>PRO</span></h1>
-<p>Academy + Live Scanner + Journal + Pro Signals</p>
-</header>
+  <!-- TOP BAR -->
+  <header class="topbar">
 
-<!-- 1 DASHBOARD -->
-<div id="dashboard" class="tab active">
-<h3>🏠 1. Dashboard</h3>
-<div class="card">
-<h4>MARKET STATUS</h4>
-<p><span class="dot bg-g"></span>GU — <b class="green">Bullish</b></p>
-<p><span class="dot bg-r"></span>EU — <b class="red">Bearish</b></p>
-<p><span class="dot bg-y"></span>XAUUSD — <b class="gold">Neutral - $<span id="goldPrice">Loading</span></b></p>
-<p><span class="dot bg-g"></span>USDJPY — <b class="green">Bullish</b></p>
-</div>
-<div class="card" style="border-color:gold">
-<h4>🔥 Today's Setups</h4>
-<p><b>GBPUSD — SELL setup forming</b></p>
-<p style="color:#888; font-size:13px">Confidence: <span id="conf">82%</span> • BOS Bearish H1</p>
-<div class="confbar"><div class="confill" style="width:82%"></div></div>
-<button class="btn" onclick="scanLive()">SCAN LIVE NOW</button>
-</div>
-</div>
+    <div class="brand">
+      <div class="logo">S</div>
 
-<!-- 2-7 SCANNER -->
-<div id="scanner" class="tab">
-<h3>📊 2. Live Market Scanner</h3>
-<div class="card"><p>3. Market Structure: BOS, CHOCH/MSS, Trend</p><small id="ms">Waiting for scan...</small></div>
-<div class="card"><p>4. Supply & Demand</p><small>Zones auto-detected</small></div>
-<div class="card"><p>5. Liquidity / Sweeps</p><small>Equal highs/lows swept</small></div>
-<div class="card"><p>6. FVG & Order Blocks</p><small>Bullish/Bearish FVG</small></div>
-<div class="card"><p>7. Trendlines / S&R</p><small>Auto trendline</small></div>
-</div>
+      <div>
+        <h1>SwiftDrop FX</h1>
+        <span>Smart Market Intelligence</span>
+      </div>
+    </div>
 
-<!-- 8-10 SETUP -->
-<div id="setup" class="tab">
-<h3>🎯 8-10 Setup Engine</h3>
-<div class="card"><p>8. News & Economic Calendar</p><small>High impact news filter - No trade 30 mins before/after</small></div>
-<div class="card">
-<p>9. Entry / SL / TP Calculations</p>
-<p>Entry: <span id="entry">-</span><br>SL: <span id="sl">-</span> | TP: <span id="tp">-</span></p>
-<button class="btn" onclick="calcSLTP()">Calculate for GOLD</button>
-</div>
-<div class="card"><p>10. Setup Confidence / Scoring</p><p style="font-size:30px; color:gold">82%</p><small>Structure 30 + Liquidity 20 + FVG 20 + Trend 12</small></div>
-</div>
+    <div class="status">
+      <span class="status-dot"></span>
+      <span id="connectionStatus">System Ready</span>
+    </div>
 
-<!-- 11 ACADEMY -->
-<div id="academy" class="tab">
-<h3>📚 11. FX Academy</h3>
-<div class="card lesson"><b>Beginner: What is Market Structure?</b><p style="color:#888">HH, HL, LH, LL, BOS explained</p></div>
-<div class="card lesson"><b>Intermediate: CHOCH & MSS</b><p style="color:#888">When trend go change</p></div>
-<div class="card lesson"><b>Advanced: Liquidity + FVG + OB</b><p style="color:#888">Pro entry model for XAUUSD</p></div>
-</div>
+  </header>
 
-<!-- 12-13 JOURNAL -->
-<div id="journal" class="tab">
-<h3>📓 12. Trading Journal</h3>
-<input id="pair" placeholder="Pair e.g. XAUUSD">
-<input id="result" placeholder="Result e.g. +$20 / -$10">
-<textarea placeholder="Notes - Why you enter?"></textarea>
-<button class="btn" onclick="saveTrade()">Save Trade</button>
-<div id="trades"></div>
-<h3 style="margin-top:20px">📈 13. Trade Statistics</h3>
-<div class="card"><p>Win Rate: <span id="winrate">0%</span></p><p>Total Trades: <span id="total">0</span></p></div>
-</div>
 
-<!-- 14 SETTINGS -->
-<div id="settings" class="tab">
-<h3>⚙️ 14. Settings & Upgrades</h3>
-<div class="card"><p>FX PRO v1.0 - Foundation</p><p style="color:gold">Phase: Building frontend first (no fake live scanner)</p><p style="color:#888; font-size:12px">Next: Connect real market API + backend database</p></div>
-</div>
+  <!-- MAIN APP -->
 
-<div class="nav">
-<button class="active" onclick="openTab('dashboard',this)">🏠<br>Dash</button>
-<button onclick="openTab('scanner',this)">📊<br>Scan</button>
-<button onclick="openTab('setup',this)">🎯<br>Setup</button>
-<button onclick="openTab('academy',this)">📚<br>Acad</button>
-<button onclick="openTab('journal',this)">📓<br>Journ</button>
-<button onclick="openTab('settings',this)">⚙️<br>Set</button>
-</div>
+  <main class="app">
 
-<script>
-function openTab(id,btn){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-}
-async function scanLive(){
-  try{
-    let r = await fetch('https://api.gold-api.com/price/XAU');
-    let d = await r.json();
-    document.getElementById('goldPrice').innerText = d.price.toFixed(2);
-    document.getElementById('ms').innerText = "BOS detected on XAU: Bearish MSS on M15, waiting for FVG retest";
-    document.getElementById('entry').innerText = d.price.toFixed(2);
-    document.getElementById('sl').innerText = (d.price+6).toFixed(2);
-    document.getElementById('tp').innerText = (d.price-15).toFixed(2);
-  }catch(e){ alert("Check internet"); }
-}
-function calcSLTP(){ scanLive(); }
-let trades=[];
-function saveTrade(){
-  let p=document.getElementById('pair').value, r=document.getElementById('result').value;
-  if(!p) return;
-  trades.push({pair:p, res:r});
-  document.getElementById('trades').innerHTML = trades.map(t=>`<div class="card">${t.pair} - ${t.res}</div>`).join('');
-  document.getElementById('total').innerText=trades.length;
-}
-scanLive();
-</script>
+    <!-- PAIR SELECTOR -->
+
+    <section class="panel pair-panel">
+
+      <div class="section-title">
+        <h2>Markets</h2>
+        <span>Choose instrument</span>
+      </div>
+
+      <div class="pairs">
+
+        <button class="pair active" data-symbol="EURUSD">
+          <strong>EUR/USD</strong>
+          <small>Euro / Dollar</small>
+        </button>
+
+        <button class="pair" data-symbol="GBPUSD">
+          <strong>GBP/USD</strong>
+          <small>Pound / Dollar</small>
+        </button>
+
+        <button class="pair" data-symbol="XAUUSD">
+          <strong>XAU/USD</strong>
+          <small>Gold</small>
+        </button>
+
+        <button class="pair" data-symbol="USDJPY">
+          <strong>USD/JPY</strong>
+          <small>Dollar / Yen</small>
+        </button>
+
+        <button class="pair" data-symbol="AUDUSD">
+          <strong>AUD/USD</strong>
+          <small>Aussie / Dollar</small>
+        </button>
+
+        <button class="pair" data-symbol="USDCAD">
+          <strong>USD/CAD</strong>
+          <small>Dollar / CAD</small>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- MARKET HEADER -->
+
+    <section class="market-header panel">
+
+      <div>
+
+        <div class="market-name">
+          <span id="selectedPair">EUR/USD</span>
+
+          <span class="live-badge">
+            LIVE
+          </span>
+        </div>
+
+        <div class="price-row">
+
+          <span id="marketPrice">
+            Waiting...
+          </span>
+
+          <span id="priceChange" class="neutral">
+            --
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="timeframes">
+
+        <button class="timeframe" data-timeframe="5">5M</button>
+
+        <button class="timeframe active" data-timeframe="15">
+          15M
+        </button>
+
+        <button class="timeframe" data-timeframe="60">
+          1H
+        </button>
+
+        <button class="timeframe" data-timeframe="240">
+          4H
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- TRADINGVIEW CHART -->
+
+    <section class="chart panel">
+
+      <div id="tradingview_chart"></div>
+
+    </section>
+
+
+    <!-- ANALYSIS -->
+
+    <section class="analysis-grid">
+
+
+      <!-- MARKET STRUCTURE -->
+
+      <div class="panel analysis-card">
+
+        <div class="card-title">
+          <h3>Market Structure</h3>
+          <span>Live analysis</span>
+        </div>
+
+
+        <div class="analysis-row">
+
+          <span>Trend</span>
+
+          <strong id="trend">
+            WAITING
+          </strong>
+
+        </div>
+
+
+        <div class="analysis-row">
+
+          <span>Structure</span>
+
+          <strong id="structure">
+            WAITING
+          </strong>
+
+        </div>
+
+
+        <div class="analysis-row">
+
+          <span>Momentum</span>
+
+          <strong id="momentum">
+            WAITING
+          </strong>
+
+        </div>
+
+
+        <div class="analysis-row">
+
+          <span>Liquidity</span>
+
+          <strong id="liquidity">
+            WAITING
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- SIGNAL -->
+
+      <div class="panel signal-card">
+
+        <div class="card-title">
+
+          <h3>SwiftDrop Signal</h3>
+
+          <span id="signalTime">
+            --
+          </span>
+
+        </div>
+
+
+        <div
+          id="signal"
+          class="signal wait"
+        >
+          WAIT
+        </div>
+
+
+        <p id="signalReason">
+          Waiting for market conditions...
+        </p>
+
+
+        <div class="trade-levels">
+
+          <div>
+
+            <span>Entry</span>
+
+            <strong id="entry">
+              --
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>Stop Loss</span>
+
+            <strong id="stopLoss">
+              --
+            </strong>
+
+          </div>
+
+
+          <div>
+
+            <span>Take Profit</span>
+
+            <strong id="takeProfit">
+              --
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- TECHNICAL CONDITIONS -->
+
+    <section class="panel">
+
+      <div class="card-title">
+
+        <h3>Technical Conditions</h3>
+
+        <span>Strategy engine</span>
+
+      </div>
+
+
+      <div class="conditions">
+
+        <div class="condition">
+
+          <span>EMA 9 / 21</span>
+
+          <strong id="emaCondition">
+            WAITING
+          </strong>
+
+        </div>
+
+
+        <div class="condition">
+
+          <span>RSI</span>
+
+          <strong id="rsi">
+            --
+          </strong>
+
+        </div>
+
+
+        <div class="condition">
+
+          <span>Break of Structure</span>
+
+          <strong id="bos">
+            WAITING
+          </strong>
+
+        </div>
+
+
+        <div class="condition">
+
+          <span>Liquidity Sweep</span>
+
+          <strong id="sweep">
+            WAITING
+          </strong>
+
+        </div>
+
+
+        <div class="condition">
+
+          <span>Support</span>
+
+          <strong id="support">
+            --
+          </strong>
+
+        </div>
+
+
+        <div class="condition">
+
+          <span>Resistance</span>
+
+          <strong id="resistance">
+            --
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- WAITING ENGINE -->
+
+    <section class="panel waiting-panel">
+
+      <div class="waiting-icon">
+        ⏳
+      </div>
+
+      <div>
+
+        <h3 id="waitingTitle">
+          What are we waiting for?
+        </h3>
+
+        <p id="waitingText">
+          The engine is waiting for trend,
+          structure and momentum to align.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- MARKET CHECKLIST -->
+
+    <section class="panel">
+
+      <div class="card-title">
+
+        <h3>Trade Checklist</h3>
+
+        <span>Before entering</span>
+
+      </div>
+
+
+      <div class="checklist">
+
+        <label>
+          <input type="checkbox" id="checkTrend">
+          Trend confirmed
+        </label>
+
+
+        <label>
+          <input type="checkbox" id="checkStructure">
+          Market structure confirmed
+        </label>
+
+
+        <label>
+          <input type="checkbox" id="checkLiquidity">
+          Liquidity event confirmed
+        </label>
+
+
+        <label>
+          <input type="checkbox" id="checkEntry">
+          Entry confirmation
+        </label>
+
+
+        <label>
+          <input type="checkbox" id="checkRisk">
+          Risk controlled
+        </label>
+
+      </div>
+
+    </section>
+
+
+    <!-- API SETTINGS -->
+
+    <section class="panel settings">
+
+      <div class="card-title">
+
+        <h3>Live Data Connection</h3>
+
+        <span>API Settings</span>
+
+      </div>
+
+
+      <p class="settings-info">
+        Add your Twelve Data API key to enable live
+        market data for the analysis engine.
+      </p>
+
+
+      <div class="api-box">
+
+        <input
+          type="password"
+          id="apiKey"
+          placeholder="Enter Twelve Data API key"
+        >
+
+        <button id="saveApi">
+          Save
+        </button>
+
+      </div>
+
+
+      <small>
+        Your key is stored locally in your browser.
+      </small>
+
+    </section>
+
+
+    <!-- REFRESH -->
+
+    <button id="refreshButton" class="refresh-button">
+      🔄 Refresh Market Analysis
+    </button>
+
+
+    <footer>
+
+      <p>
+        SwiftDrop FX © 2026
+      </p>
+
+      <p>
+        Educational market-analysis tool.
+        Always manage your risk.
+      </p>
+
+    </footer>
+
+  </main>
+
+
+  <script src="app.js"></script>
+
 </body>
 </html>
