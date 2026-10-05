@@ -1,501 +1,1375 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>SwiftDrop FX</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
   <!-- TradingView -->
   <script src="https://s3.tradingview.com/tv.js"></script>
+
 </head>
+
 
 <body>
 
-  <!-- TOP BAR -->
-  <header class="topbar">
 
-    <div class="brand">
-      <div class="logo">S</div>
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
 
-      <div>
-        <h1>SwiftDrop FX</h1>
-        <span>Smart Market Intelligence</span>
-      </div>
+<header class="topbar">
+
+  <div class="brand">
+
+    <div class="logo">
+      S
     </div>
 
-    <div class="status">
-      <span class="status-dot"></span>
-      <span id="connectionStatus">System Ready</span>
+    <div>
+
+      <h1>
+        SwiftDrop FX
+      </h1>
+
+      <span>
+        Smart Market Intelligence
+      </span>
+
     </div>
 
-  </header>
+  </div>
 
 
-  <!-- MAIN APP -->
+  <div class="status">
 
-  <main class="app">
+    <span
+      class="status-dot"
+      id="statusDot"
+    ></span>
 
-    <!-- PAIR SELECTOR -->
+    <span id="connectionStatus">
+      System Ready
+    </span>
 
-    <section class="panel pair-panel">
+  </div>
 
-      <div class="section-title">
-        <h2>Markets</h2>
-        <span>Choose instrument</span>
-      </div>
+</header>
 
-      <div class="pairs">
 
-        <button class="pair active" data-symbol="EURUSD">
-          <strong>EUR/USD</strong>
-          <small>Euro / Dollar</small>
-        </button>
 
-        <button class="pair" data-symbol="GBPUSD">
-          <strong>GBP/USD</strong>
-          <small>Pound / Dollar</small>
-        </button>
+<!-- =========================================================
+     MAIN APP
+========================================================= -->
 
-        <button class="pair" data-symbol="XAUUSD">
-          <strong>XAU/USD</strong>
-          <small>Gold</small>
-        </button>
+<main class="app">
 
-        <button class="pair" data-symbol="USDJPY">
-          <strong>USD/JPY</strong>
-          <small>Dollar / Yen</small>
-        </button>
 
-        <button class="pair" data-symbol="AUDUSD">
-          <strong>AUD/USD</strong>
-          <small>Aussie / Dollar</small>
-        </button>
+<!-- =========================================================
+     MARKETS
+========================================================= -->
 
-        <button class="pair" data-symbol="USDCAD">
-          <strong>USD/CAD</strong>
-          <small>Dollar / CAD</small>
-        </button>
+<section class="panel pair-panel">
 
-      </div>
+  <div class="section-title">
 
-    </section>
+    <h2>
+      Markets
+    </h2>
 
+    <span>
+      Choose instrument
+    </span>
 
-    <!-- MARKET HEADER -->
+  </div>
 
-    <section class="market-header panel">
 
-      <div>
+  <div class="pairs">
 
-        <div class="market-name">
-          <span id="selectedPair">EUR/USD</span>
 
-          <span class="live-badge">
-            LIVE
-          </span>
-        </div>
+    <button
+      class="pair active"
+      data-symbol="EURUSD"
+    >
 
-        <div class="price-row">
-
-          <span id="marketPrice">
-            Waiting...
-          </span>
-
-          <span id="priceChange" class="neutral">
-            --
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div class="timeframes">
-
-        <button class="timeframe" data-timeframe="5">5M</button>
-
-        <button class="timeframe active" data-timeframe="15">
-          15M
-        </button>
-
-        <button class="timeframe" data-timeframe="60">
-          1H
-        </button>
-
-        <button class="timeframe" data-timeframe="240">
-          4H
-        </button>
-
-      </div>
-
-    </section>
-
-
-    <!-- TRADINGVIEW CHART -->
-
-    <section class="chart panel">
-
-      <div id="tradingview_chart"></div>
-
-    </section>
-
-
-    <!-- ANALYSIS -->
-
-    <section class="analysis-grid">
-
-
-      <!-- MARKET STRUCTURE -->
-
-      <div class="panel analysis-card">
-
-        <div class="card-title">
-          <h3>Market Structure</h3>
-          <span>Live analysis</span>
-        </div>
-
-
-        <div class="analysis-row">
-
-          <span>Trend</span>
-
-          <strong id="trend">
-            WAITING
-          </strong>
-
-        </div>
-
-
-        <div class="analysis-row">
-
-          <span>Structure</span>
-
-          <strong id="structure">
-            WAITING
-          </strong>
-
-        </div>
-
-
-        <div class="analysis-row">
-
-          <span>Momentum</span>
-
-          <strong id="momentum">
-            WAITING
-          </strong>
-
-        </div>
-
-
-        <div class="analysis-row">
-
-          <span>Liquidity</span>
-
-          <strong id="liquidity">
-            WAITING
-          </strong>
-
-        </div>
-
-      </div>
-
-
-      <!-- SIGNAL -->
-
-      <div class="panel signal-card">
-
-        <div class="card-title">
-
-          <h3>SwiftDrop Signal</h3>
-
-          <span id="signalTime">
-            --
-          </span>
-
-        </div>
-
-
-        <div
-          id="signal"
-          class="signal wait"
-        >
-          WAIT
-        </div>
-
-
-        <p id="signalReason">
-          Waiting for market conditions...
-        </p>
-
-
-        <div class="trade-levels">
-
-          <div>
-
-            <span>Entry</span>
-
-            <strong id="entry">
-              --
-            </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>Stop Loss</span>
-
-            <strong id="stopLoss">
-              --
-            </strong>
-
-          </div>
-
-
-          <div>
-
-            <span>Take Profit</span>
-
-            <strong id="takeProfit">
-              --
-            </strong>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- TECHNICAL CONDITIONS -->
-
-    <section class="panel">
-
-      <div class="card-title">
-
-        <h3>Technical Conditions</h3>
-
-        <span>Strategy engine</span>
-
-      </div>
-
-
-      <div class="conditions">
-
-        <div class="condition">
-
-          <span>EMA 9 / 21</span>
-
-          <strong id="emaCondition">
-            WAITING
-          </strong>
-
-        </div>
-
-
-        <div class="condition">
-
-          <span>RSI</span>
-
-          <strong id="rsi">
-            --
-          </strong>
-
-        </div>
-
-
-        <div class="condition">
-
-          <span>Break of Structure</span>
-
-          <strong id="bos">
-            WAITING
-          </strong>
-
-        </div>
-
-
-        <div class="condition">
-
-          <span>Liquidity Sweep</span>
-
-          <strong id="sweep">
-            WAITING
-          </strong>
-
-        </div>
-
-
-        <div class="condition">
-
-          <span>Support</span>
-
-          <strong id="support">
-            --
-          </strong>
-
-        </div>
-
-
-        <div class="condition">
-
-          <span>Resistance</span>
-
-          <strong id="resistance">
-            --
-          </strong>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- WAITING ENGINE -->
-
-    <section class="panel waiting-panel">
-
-      <div class="waiting-icon">
-        ⏳
-      </div>
-
-      <div>
-
-        <h3 id="waitingTitle">
-          What are we waiting for?
-        </h3>
-
-        <p id="waitingText">
-          The engine is waiting for trend,
-          structure and momentum to align.
-        </p>
-
-      </div>
-
-    </section>
-
-
-    <!-- MARKET CHECKLIST -->
-
-    <section class="panel">
-
-      <div class="card-title">
-
-        <h3>Trade Checklist</h3>
-
-        <span>Before entering</span>
-
-      </div>
-
-
-      <div class="checklist">
-
-        <label>
-          <input type="checkbox" id="checkTrend">
-          Trend confirmed
-        </label>
-
-
-        <label>
-          <input type="checkbox" id="checkStructure">
-          Market structure confirmed
-        </label>
-
-
-        <label>
-          <input type="checkbox" id="checkLiquidity">
-          Liquidity event confirmed
-        </label>
-
-
-        <label>
-          <input type="checkbox" id="checkEntry">
-          Entry confirmation
-        </label>
-
-
-        <label>
-          <input type="checkbox" id="checkRisk">
-          Risk controlled
-        </label>
-
-      </div>
-
-    </section>
-
-
-    <!-- API SETTINGS -->
-
-    <section class="panel settings">
-
-      <div class="card-title">
-
-        <h3>Live Data Connection</h3>
-
-        <span>API Settings</span>
-
-      </div>
-
-
-      <p class="settings-info">
-        Add your Twelve Data API key to enable live
-        market data for the analysis engine.
-      </p>
-
-
-      <div class="api-box">
-
-        <input
-          type="password"
-          id="apiKey"
-          placeholder="Enter Twelve Data API key"
-        >
-
-        <button id="saveApi">
-          Save
-        </button>
-
-      </div>
-
+      <strong>
+        EUR/USD
+      </strong>
 
       <small>
-        Your key is stored locally in your browser.
+        Euro / Dollar
       </small>
 
-    </section>
-
-
-    <!-- REFRESH -->
-
-    <button id="refreshButton" class="refresh-button">
-      🔄 Refresh Market Analysis
     </button>
 
 
-    <footer>
+    <button
+      class="pair"
+      data-symbol="GBPUSD"
+    >
 
-      <p>
-        SwiftDrop FX © 2026
-      </p>
+      <strong>
+        GBP/USD
+      </strong>
 
-      <p>
-        Educational market-analysis tool.
-        Always manage your risk.
-      </p>
+      <small>
+        Pound / Dollar
+      </small>
 
-    </footer>
-
-  </main>
+    </button>
 
 
-  <script src="app.js"></script>
+    <button
+      class="pair"
+      data-symbol="XAUUSD"
+    >
+
+      <strong>
+        XAU/USD
+      </strong>
+
+      <small>
+        Gold
+      </small>
+
+    </button>
+
+
+    <button
+      class="pair"
+      data-symbol="USDJPY"
+    >
+
+      <strong>
+        USD/JPY
+      </strong>
+
+      <small>
+        Dollar / Yen
+      </small>
+
+    </button>
+
+
+    <button
+      class="pair"
+      data-symbol="AUDUSD"
+    >
+
+      <strong>
+        AUD/USD
+      </strong>
+
+      <small>
+        Aussie / Dollar
+      </small>
+
+    </button>
+
+
+    <button
+      class="pair"
+      data-symbol="USDCAD"
+    >
+
+      <strong>
+        USD/CAD
+      </strong>
+
+      <small>
+        Dollar / CAD
+      </small>
+
+    </button>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MARKET HEADER
+========================================================= -->
+
+<section class="market-header panel">
+
+  <div>
+
+    <div class="market-name">
+
+      <span id="selectedPair">
+        EUR/USD
+      </span>
+
+      <span class="live-badge">
+        LIVE
+      </span>
+
+    </div>
+
+
+    <div class="price-row">
+
+      <span id="marketPrice">
+        Waiting...
+      </span>
+
+      <span
+        id="priceChange"
+        class="neutral"
+      >
+        --
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <div class="timeframes">
+
+    <button
+      class="timeframe"
+      data-timeframe="5"
+    >
+      5M
+    </button>
+
+
+    <button
+      class="timeframe active"
+      data-timeframe="15"
+    >
+      15M
+    </button>
+
+
+    <button
+      class="timeframe"
+      data-timeframe="60"
+    >
+      1H
+    </button>
+
+
+    <button
+      class="timeframe"
+      data-timeframe="240"
+    >
+      4H
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     TRADINGVIEW CHART
+========================================================= -->
+
+<section class="chart panel">
+
+  <div id="tradingview_chart"></div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MARKET STRUCTURE
+========================================================= -->
+
+<section class="analysis-grid">
+
+
+<div class="panel analysis-card">
+
+  <div class="card-title">
+
+    <h3>
+      Market Structure
+    </h3>
+
+    <span>
+      Live analysis
+    </span>
+
+  </div>
+
+
+  <div class="analysis-row">
+
+    <span>
+      Trend
+    </span>
+
+    <strong id="trend">
+      WAITING
+    </strong>
+
+  </div>
+
+
+  <div class="analysis-row">
+
+    <span>
+      Structure
+    </span>
+
+    <strong id="structure">
+      WAITING
+    </strong>
+
+  </div>
+
+
+  <div class="analysis-row">
+
+    <span>
+      Momentum
+    </span>
+
+    <strong id="momentum">
+      WAITING
+    </strong>
+
+  </div>
+
+
+  <div class="analysis-row">
+
+    <span>
+      Liquidity
+    </span>
+
+    <strong id="liquidity">
+      WAITING
+    </strong>
+
+  </div>
+
+
+  <div class="analysis-row">
+
+    <span>
+      Market State
+    </span>
+
+    <strong id="marketState">
+      WAITING
+    </strong>
+
+  </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     SIGNAL
+========================================================= -->
+
+<div class="panel signal-card">
+
+  <div class="card-title">
+
+    <h3>
+      SwiftDrop Signal
+    </h3>
+
+    <span id="signalTime">
+      --
+    </span>
+
+  </div>
+
+
+  <div
+    id="signal"
+    class="signal wait"
+  >
+    WAIT
+  </div>
+
+
+  <p id="signalReason">
+    Waiting for market conditions...
+  </p>
+
+
+  <div class="trade-levels">
+
+
+    <div>
+
+      <span>
+        Entry
+      </span>
+
+      <strong id="entry">
+        --
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        Stop Loss
+      </span>
+
+      <strong id="stopLoss">
+        --
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        Take Profit
+      </span>
+
+      <strong id="takeProfit">
+        --
+      </strong>
+
+    </div>
+
+
+  </div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MULTI TIMEFRAME ANALYSIS
+========================================================= -->
+
+<section class="panel">
+
+  <div class="card-title">
+
+    <h3>
+      Multi-Timeframe Analysis
+    </h3>
+
+    <span>
+      HTF → LTF
+    </span>
+
+  </div>
+
+
+  <div class="conditions">
+
+
+    <div class="condition">
+
+      <span>
+        4H Direction
+      </span>
+
+      <strong id="trend4h">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        1H Direction
+      </span>
+
+      <strong id="trend1h">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        15M Direction
+      </span>
+
+      <strong id="trend15m">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        5M Direction
+      </span>
+
+      <strong id="trend5m">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        MTF Alignment
+      </span>
+
+      <strong id="mtfAlignment">
+        WAITING
+      </strong>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     SMART MONEY / MARKET STRUCTURE
+========================================================= -->
+
+<section class="panel">
+
+  <div class="card-title">
+
+    <h3>
+      Smart Market Structure
+    </h3>
+
+    <span>
+      Price Action Engine
+    </span>
+
+  </div>
+
+
+  <div class="conditions">
+
+
+    <div class="condition">
+
+      <span>
+        BOS
+      </span>
+
+      <strong id="bos">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        CHOCH
+      </span>
+
+      <strong id="choch">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        MSS
+      </span>
+
+      <strong id="mss">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Swing Structure
+      </span>
+
+      <strong id="swingStructure">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Higher High / Lower Low
+      </span>
+
+      <strong id="hhll">
+        WAITING
+      </strong>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     LIQUIDITY
+========================================================= -->
+
+<section class="panel">
+
+  <div class="card-title">
+
+    <h3>
+      Liquidity Map
+    </h3>
+
+    <span>
+      Smart Money Areas
+    </span>
+
+  </div>
+
+
+  <div class="conditions">
+
+
+    <div class="condition">
+
+      <span>
+        Liquidity Sweep
+      </span>
+
+      <strong id="sweep">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Buy-Side Liquidity
+      </span>
+
+      <strong id="buyLiquidity">
+        --
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Sell-Side Liquidity
+      </span>
+
+      <strong id="sellLiquidity">
+        --
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Equal Highs
+      </span>
+
+      <strong id="equalHighs">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Equal Lows
+      </span>
+
+      <strong id="equalLows">
+        WAITING
+      </strong>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     FVG / ORDER BLOCK / SUPPLY DEMAND
+========================================================= -->
+
+<section class="panel">
+
+  <div class="card-title">
+
+    <h3>
+      Smart Money Zones
+    </h3>
+
+    <span>
+      Entry Areas
+    </span>
+
+  </div>
+
+
+  <div class="conditions">
+
+
+    <div class="condition">
+
+      <span>
+        Fair Value Gap
+      </span>
+
+      <strong id="fvg">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        FVG Status
+      </span>
+
+      <strong id="fvgStatus">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Order Block
+      </span>
+
+      <strong id="orderBlock">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Supply Zone
+      </span>
+
+      <strong id="supply">
+        --
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Demand Zone
+      </span>
+
+      <strong id="demand">
+        --
+      </strong>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     TECHNICAL CONDITIONS
+========================================================= -->
+
+<section class="panel">
+
+  <div class="card-title">
+
+    <h3>
+      Technical Conditions
+    </h3>
+
+    <span>
+      Strategy Engine
+    </span>
+
+  </div>
+
+
+  <div class="conditions">
+
+
+    <div class="condition">
+
+      <span>
+        EMA 9 / 21
+      </span>
+
+      <strong id="emaCondition">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        RSI
+      </span>
+
+      <strong id="rsi">
+        --
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        ATR
+      </span>
+
+      <strong id="atr">
+        --
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Break of Structure
+      </span>
+
+      <strong id="bosCondition">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Support
+      </span>
+
+      <strong id="support">
+        --
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Resistance
+      </span>
+
+      <strong id="resistance">
+        --
+      </strong>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     TRADE PLAN
+========================================================= -->
+
+<section class="panel">
+
+  <div class="card-title">
+
+    <h3>
+      SwiftDrop Trade Plan
+    </h3>
+
+    <span>
+      Risk / Reward
+    </span>
+
+  </div>
+
+
+  <div class="trade-levels">
+
+
+    <div>
+
+      <span>
+        Entry
+      </span>
+
+      <strong id="planEntry">
+        --
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        Stop Loss
+      </span>
+
+      <strong id="planSL">
+        --
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        TP1
+      </span>
+
+      <strong id="planTP1">
+        --
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        TP2
+      </span>
+
+      <strong id="planTP2">
+        --
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        TP3
+      </span>
+
+      <strong id="planTP3">
+        --
+      </strong>
+
+    </div>
+
+
+    <div>
+
+      <span>
+        R:R
+      </span>
+
+      <strong id="riskReward">
+        --
+      </strong>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     WAITING ENGINE
+========================================================= -->
+
+<section class="panel waiting-panel">
+
+  <div class="waiting-icon">
+    ⏳
+  </div>
+
+
+  <div>
+
+    <h3 id="waitingTitle">
+      What are we waiting for?
+    </h3>
+
+
+    <p id="waitingText">
+      The engine is waiting for trend,
+      structure, liquidity and entry confirmation.
+    </p>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     TRADE CHECKLIST
+========================================================= -->
+
+<section class="panel">
+
+  <div class="card-title">
+
+    <h3>
+      Trade Checklist
+    </h3>
+
+    <span>
+      Before entering
+    </span>
+
+  </div>
+
+
+  <div class="checklist">
+
+
+    <label>
+
+      <input
+        type="checkbox"
+        id="checkTrend"
+      >
+
+      Trend confirmed
+
+    </label>
+
+
+    <label>
+
+      <input
+        type="checkbox"
+        id="checkStructure"
+      >
+
+      Market structure confirmed
+
+    </label>
+
+
+    <label>
+
+      <input
+        type="checkbox"
+        id="checkLiquidity"
+      >
+
+      Liquidity event confirmed
+
+    </label>
+
+
+    <label>
+
+      <input
+        type="checkbox"
+        id="checkBOS"
+      >
+
+      BOS / MSS confirmed
+
+    </label>
+
+
+    <label>
+
+      <input
+        type="checkbox"
+        id="checkZone"
+      >
+
+      FVG / Order Block confirmed
+
+    </label>
+
+
+    <label>
+
+      <input
+        type="checkbox"
+        id="checkEntry"
+      >
+
+      Entry confirmation
+
+    </label>
+
+
+    <label>
+
+      <input
+        type="checkbox"
+        id="checkRisk"
+      >
+
+      Risk controlled
+
+    </label>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     SESSION
+========================================================= -->
+
+<section class="panel">
+
+  <div class="card-title">
+
+    <h3>
+      Market Session
+    </h3>
+
+    <span>
+      Trading Hours
+    </span>
+
+  </div>
+
+
+  <div class="conditions">
+
+
+    <div class="condition">
+
+      <span>
+        Current Session
+      </span>
+
+      <strong id="session">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Market Status
+      </span>
+
+      <strong id="marketOpen">
+        WAITING
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Asian High
+      </span>
+
+      <strong id="asianHigh">
+        --
+      </strong>
+
+    </div>
+
+
+    <div class="condition">
+
+      <span>
+        Asian Low
+      </span>
+
+      <strong id="asianLow">
+        --
+      </strong>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     API SETTINGS
+========================================================= -->
+
+<section class="panel settings">
+
+  <div class="card-title">
+
+    <h3>
+      Live Data Connection
+    </h3>
+
+    <span>
+      API Settings
+    </span>
+
+  </div>
+
+
+  <p class="settings-info">
+
+    Add your Twelve Data API key to enable
+    live market data for the analysis engine.
+
+  </p>
+
+
+  <div class="api-box">
+
+
+    <input
+      type="password"
+      id="apiKey"
+      placeholder="Enter Twelve Data API key"
+    >
+
+
+    <button id="saveApi">
+      Save
+    </button>
+
+
+  </div>
+
+
+  <small>
+
+    Your key is stored locally in your browser.
+
+  </small>
+
+</section>
+
+
+
+<!-- =========================================================
+     REFRESH
+========================================================= -->
+
+<button
+  id="refreshButton"
+  class="refresh-button"
+>
+
+  🔄 Refresh Market Analysis
+
+</button>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+  <p>
+    SwiftDrop FX © 2026
+  </p>
+
+
+  <p>
+    Educational market-analysis tool.
+    Always manage your risk.
+  </p>
+
+</footer>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     APP JAVASCRIPT
+========================================================= -->
+
+<script src="app.js"></script>
+
 
 </body>
+
 </html>
