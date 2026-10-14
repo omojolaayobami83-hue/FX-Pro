@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070b0a">
+
+  <title>SwiftDrop FX</title>
+
+  <link rel="stylesheet" href="/style.css">
+
+  <script src="https://s3.tradingview.com/tv.js"></script>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+
+    <a class="brand" href="#">
+      <span class="brand-mark">SF</span>
+
+      <span>
+        <strong>SwiftDrop <em>FX</em></strong>
+        <small>SMART MARKET INTELLIGENCE</small>
+      </span>
+    </a>
+
+    <nav class="main-nav">
+      <button class="nav-item active" data-view="dashboard">Dashboard</button>
+      <button class="nav-item" data-view="scanner">Market Scanner</button>
+      <button class="nav-item" data-view="academy">FX Academy</button>
+      <button class="nav-item" data-view="journal">Trade Journal</button>
+      <button class="nav-item" data-view="premium">Premium</button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="status-card">
+        <span class="status-dot"></span>
+
+        <div>
+          <strong id="systemStatus">System Ready</strong>
+          <small id="connectionStatus">Checking connection...</small>
+        </div>
+      </div>
+
+      <p class="sidebar-note">
+        Learn the market. Respect your risk.
+      </p>
+    </div>
+
+  </aside>
+
+
+  <main class="main-content">
+
+    <header class="topbar">
+
+      <div>
+        <p class="eyebrow">YOUR TRADING WORKSPACE</p>
+        <h1 id="pageTitle">Market Dashboard</h1>
+      </div>
+
+      <button class="button button-ghost" id="refreshButton">
+        ↻ Refresh
+      </button>
+
+    </header>
+
+
+    <!-- DASHBOARD -->
+
+    <section class="view active" id="view-dashboard">
+
+      <div class="welcome-row">
+
+        <div>
+          <h2>Read the market. <span>Respect the risk.</span></h2>
+
+          <p>
+            Review trend, structure and momentum before considering a trade.
+          </p>
+        </div>
+
+        <div class="market-select-wrap">
+
+          <label for="marketSelect">SELECT MARKET</label>
+
+          <select id="marketSelect">
+            <option value="EUR/USD">EUR/USD</option>
+            <option value="GBP/USD">GBP/USD</option>
+            <option value="XAU/USD">XAU/USD - GOLD</option>
+            <option value="USD/JPY">USD/JPY</option>
+            <option value="AUD/USD">AUD/USD</option>
+            <option value="USD/CAD">USD/CAD</option>
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="metrics-grid">
+
+        <article class="metric-card">
+          <span class="metric-label">LATEST CLOSE</span>
+          <strong id="marketPrice">—</strong>
+          <small id="priceChange">Waiting for data</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label">MARKET BIAS</span>
+          <strong id="trendValue">Waiting</strong>
+          <small id="trendSub">EMA 9 / EMA 21</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label">STRUCTURE</span>
+          <strong id="structureValue">Waiting</strong>
+          <small id="structureSub">Swing structure</small>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label">RSI MOMENTUM</span>
+          <strong id="rsiValue">—</strong>
+          <small id="rsiSub">14-period RSI</small>
+        </article>
+
+      </div>
+
+
+      <div class="section-heading">
+        <div>
+          <h3>Live Chart</h3>
+          <p>Inspect price action on the chart.</p>
+        </div>
+      </div>
+
+      <div class="chart-frame">
+
+        <div id="tradingview_chart"></div>
+
+        <div class="chart-fallback" id="chartFallback">
+          Loading TradingView chart...
+        </div>
+
+      </div>
+
+
+      <div class="analysis-grid">
+
+        <article class="panel signal-panel">
+
+          <div class="panel-head">
+
+            <div>
+              <p class="eyebrow">MARKET ANALYSIS</p>
+              <h3>Setup Assessment</h3>
+            </div>
+
+            <span class="pill pill-neutral" id="signalPill">
+              WAIT
+            </span>
+
+          </div>
+
+          <p class="signal-summary" id="signalReason">
+            Waiting for market data.
+          </p>
+
+          <div class="assessment-list">
+
+            <div>
+              <span>EMA Trend</span>
+              <b id="emaCondition">Not checked</b>
+            </div>
+
+            <div>
+              <span>Structure</span>
+              <b id="structureCondition">Not checked</b>
+            </div>
+
+            <div>
+              <span>RSI Momentum</span>
+              <b id="momentumCondition">Not checked</b>
+            </div>
+
+            <div>
+              <span>Break of Structure</span>
+              <b id="bosCondition">Not checked</b>
+            </div>
+
+          </div>
+
+          <div class="notice">
+            <strong>Risk Warning</strong>
+
+            <span>
+              A market assessment is not a guaranteed entry.
+              Confirm the setup and define your risk first.
+            </span>
+          </div>
+
+        </article>
+
+
+        <article class="panel">
+
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">PRICE MAP</p>
+              <h3>Recent Levels</h3>
+            </div>
+          </div>
+
+          <div class="level-row">
+            <span>Resistance</span>
+            <strong id="resistanceValue">—</strong>
+          </div>
+
+          <div class="level-row">
+            <span>Support</span>
+            <strong id="supportValue">—</strong>
+          </div>
+
+          <div class="level-row">
+            <span>Last Candle</span>
+            <strong id="candleTime">—</strong>
+          </div>
+
+          <div class="level-row">
+            <span>Data Source</span>
+            <strong id="dataSource">Twelve Data</strong>
+          </div>
+
+          <p class="muted small">
+            Levels are calculated from recent candles.
+          </p>
+
+        </article>
+
+      </div>
+
+
+      <div class="section-heading">
+        <div>
+          <h3>Market Data Connection</h3>
+          <p>Check whether the server can access your market data.</p>
+        </div>
+      </div>
+
+      <div class="panel api-panel">
+
+        <div>
+          <strong>Twelve Data Connection</strong>
+
+          <p class="muted">
+            Configure your API key in the server environment settings.
+            Do not publish your secret API key in browser code.
+          </p>
+        </div>
+
+        <button class="button button-primary" id="checkConnectionButton">
+          Check Connection
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- MARKET SCANNER -->
+
+    <section class="view" id="view-scanner">
+
+      <div class="section-heading">
+        <div>
+          <h2>Market Scanner</h2>
+
+          <p>
+            Review available markets and their basic technical conditions.
+          </p>
+        </div>
+      </div>
+
+      <div class="scanner-grid" id="scannerGrid"></div>
+
+    </section>
+
+
+    <!-- ACADEMY -->
+
+    <section class="view" id="view-academy">
+
+      <div class="section-heading">
+        <div>
+          <h2>FX Academy</h2>
+
+          <p>
+            Learn the process before risking real money.
+          </p>
+        </div>
+      </div>
+
+      <div class="lesson-grid" id="lessonGrid"></div>
+
+      <div class="panel quiz-panel">
+
+        <h3>Quick Knowledge Check</h3>
+
+        <p>
+          What should you do when trend, structure and momentum disagree?
+        </p>
+
+        <div class="quiz-options">
+
+          <button data-answer="wrong">
+            Enter quickly
+          </button>
+
+          <button data-answer="correct">
+            Wait for clearer confirmation
+          </button>
+
+          <button data-answer="wrong">
+            Increase lot size
+          </button>
+
+        </div>
+
+        <p id="quizFeedback" class="muted"></p>
+
+      </div>
+
+    </section>
+
+
+    <!-- TRADE JOURNAL -->
+
+    <section class="view" id="view-journal">
+
+      <div class="section-heading">
+        <div>
+          <h2>Trade Journal</h2>
+
+          <p>
+            Record completed trades and learn from your decisions.
+          </p>
+        </div>
+      </div>
+
+      <div class="metrics-grid journal-metrics">
+
+        <article class="metric-card">
+          <span class="metric-label">TRADES LOGGED</span>
+          <strong id="journalCount">0</strong>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label">WINS</span>
+          <strong id="journalWins">0</strong>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label">NET PROFIT/LOSS</span>
+          <strong id="journalNet">$0.00</strong>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label">WIN RATE</span>
+          <strong id="journalWinRate">0%</strong>
+        </article>
+
+      </div>
+
+
+      <form class="panel journal-form" id="journalForm">
+
+        <h3>Record a Completed Trade</h3>
+
+        <div class="form-grid">
+
+          <label>
+            Market
+
+            <select id="tradeSymbol">
+              <option>EUR/USD</option>
+              <option>GBP/USD</option>
+              <option>XAU/USD</option>
+              <option>USD/JPY</option>
+              <option>AUD/USD</option>
+              <option>USD/CAD</option>
+            </select>
+          </label>
+
+          <label>
+            Direction
+
+            <select id="tradeDirection">
+              <option>Buy</option>
+              <option>Sell</option>
+            </select>
+          </label>
+
+          <label>
+            Result in USD
+
+            <input
+              id="tradeResult"
+              type="number"
+              step="0.01"
+              required
+              placeholder="Example: -2.50"
+            >
+          </label>
+
+          <label>
+            Setup
+
+            <select id="tradeSetup">
+              <option>Breakout / retest</option>
+              <option>Trend continuation</option>
+              <option>Liquidity sweep</option>
+              <option>Support / resistance</option>
+              <option>Other</option>
+            </select>
+          </label>
+
+        </div>
+
+        <label>
+          Notes
+
+          <textarea
+            id="tradeNotes"
+            rows="3"
+            placeholder="What did you learn from this trade?"
+          ></textarea>
+        </label>
+
+        <button class="button button-primary" type="submit">
+          Save Trade
+        </button>
+
+      </form>
+
+
+      <div class="panel">
+
+        <div class="panel-head">
+          <h3>Trade History</h3>
+
+          <button
+            class="button button-ghost button-small"
+            id="clearJournalButton"
+            type="button"
+          >
+            Clear History
+          </button>
+        </div>
+
+        <div id="journalList" class="journal-list">
+          <p class="muted">No trades logged yet.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PREMIUM -->
+
+    <section class="view" id="view-premium">
+
+      <div class="premium-hero">
+
+        <div class="premium-icon">✦</div>
+
+        <p class="eyebrow">SWIFTDROP FX PLUS</p>
+
+        <h2>Build Better Trading Habits.</h2>
+
+        <p>
+          Premium is planned to unlock advanced lessons,
+          deeper analysis and an ad-free experience.
+        </p>
+
+        <span class="pill pill-neutral">
+          PAYMENTS NOT CONNECTED YET
+        </span>
+
+      </div>
+
+
+      <div class="premium-grid">
+
+        <article class="panel">
+
+          <h3>Free Plan</h3>
+
+          <p>
+            Charts, basic analysis, starter lessons and trade journal.
+          </p>
+
+          <strong>₦0</strong>
+
+        </article>
+
+
+        <article class="panel premium-card">
+
+          <h3>Premium Plan</h3>
+
+          <p>
+            Planned advanced scanner tools, extra lessons,
+            journal analytics and no ads.
+          </p>
+
+          <strong>Coming Soon</strong>
+
+        </article>
+
+      </div>
+
+
+      <div class="notice">
+
+        <strong>Important</strong>
+
+        <span>
+          Payments and advertising have not been connected yet.
+          They must be properly integrated and tested before launch.
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <footer class="app-footer">
+
+      <span>SwiftDrop FX · Smart Market Intelligence</span>
+
+      <span>Educational tool · Not financial advice</span>
+
+    </footer>
+
+  </main>
+
+</div>
+
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/app.js"></script>
+
+</body>
+</html>
